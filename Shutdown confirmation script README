@@ -1,0 +1,133 @@
+PS Server Shutdown Verification Script
+----------------------------------------
+PowerShell utility for validating and confirming successful shutdown of multiple Windows servers after a planned outage or maintenance activity.
+
+
+Overview
+----------
+The PS Server Shutdown Verification Script helps administrators quickly verify whether a group of servers has successfully powered off following a shutdown operation.
+The script reads a list of server names from a text file, tests network connectivity to each system, and reports whether the server is still reachable or has become unreachable, indicating that the shutdown was likely successful.
+This tool is especially useful after bulk shutdown activities, maintenance windows, migrations, or data center operations where administrators need rapid confirmation that systems have powered down as expected.
+
+Features
+--------
+✅ Simple graphical file picker for server list selection
+✅ Bulk verification of multiple servers
+✅ Automatic connectivity testing using ICMP ping
+✅ Identifies servers that appear successfully powered off
+✅ Highlights servers that remain online
+✅ Generates a clear summary of shutdown status
+✅ Lightweight and easy to run from any administrative workstation
+
+Prerequisites
+---------------
+Before running the script, ensure the following:
+Administrator Access
+Administrative privileges are recommended for consistent network testing.
+Network Connectivity
+The workstation running the script must be able to:
+
+Resolve server names through DNS
+Send ICMP echo requests (Ping)
+Reach the network segments hosting the target servers
+
+Firewall Configuration
+ICMP traffic should be allowed on the target systems for accurate verification.
+
+Server List Format
+Create a text file containing one server name per line.
+Example:
+Plain TextSERVER01SERVER02SERVER03SERVER04SERVER05Show more lines
+Save the file as:
+Plain TextServers.txtShow more lines
+
+How It Works
+---------------
+Step 1 – Select Server List
+When the script launches, a file selection window appears.
+Choose the text file containing the target server names.
+
+Step 2 – Shutdown Verification
+The script performs a connectivity test against each server.
+If a server responds:
+Plain TextSERVER01 is still reachable, shutdown may not have completed.Show more lines
+If a server does not respond:
+Plain TextSERVER02 is unreachable, shutdown confirmed.``Show more lines
+Servers determined to be unreachable are added to the powered-off list.
+
+Step 3 – Review Results
+After all servers are checked, the script displays a summary.
+Example:
+Plain TextPowered Off Servers:SERVER02SERVER03SERVER04Show more lines
+
+Usage
+Download Repository
+PowerShellgit clone https://github.com/sundaramgaur21/PS-Server-Shutdown-Verification.gitShow more lines
+Run the Script
+PowerShell.\ShutdownVerification.ps1Show more lines
+Select Input File
+Choose the text file containing the server names you want to validate.
+Review Output
+The script will display:
+
+Servers that still respond to ping
+Servers that appear powered off
+
+
+Example Scenario
+An administrator shuts down 100 servers during a migration event.
+After the shutdown operation:
+
+Launch the verification script.
+Select the original server list.
+Allow the connectivity checks to complete.
+Review which systems are confirmed offline.
+Investigate any servers that remain reachable.
+
+Example output:
+Plain TextSERVER01 is unreachable, shutdown confirmed.SERVER02 is unreachable, shutdown confirmed.SERVER03 is still reachable, shutdown may not have completed.Show more lines
+Final summary:
+Plain TextPowered Off Servers:SERVER01SERVER02Show more lines
+
+Limitations
+--------------
+The script relies on ICMP (Ping) responses.
+A server may appear unreachable due to network issues rather than an actual shutdown.
+Firewall restrictions may affect results.
+Additional validation methods (WinRM, VMware status, Hyper-V status, etc.) may be required in highly restricted environments.
+
+
+Recommended Workflow
+----------------------
+This script is intended to be used immediately after running the PS Server Bulk Shutdown Script.
+Workflow Example
+
+Execute bulk shutdown script.
+Allow sufficient time for servers to power down.
+Launch the shutdown verification script.
+Confirm powered-off systems.
+Investigate any remaining online servers.
+
+
+Future Enhancements
+--------------------
+Potential future improvements include:
+
+CSV report export
+Excel report generation
+Timestamped logging
+Email notification of results
+Parallel connectivity checks
+Retry validation attempts
+Percentage completion indicator
+Integration with VMware vCenter and Hyper-V
+
+
+Author
+------
+Sundaram Gaur
+Senior Systems Engineer | Infrastructure Automation | PowerShell Enthusiast
+
+Disclaimer
+-----------
+This script provides shutdown verification based on network reachability. An unreachable server does not always guarantee that the system is fully powered off. Administrators should use additional validation methods where appropriate for critical infrastructure.
